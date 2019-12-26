@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02.RegisterScan", "Register
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01.RegisterRead", "RegisterRead\01.RegisterRead.csproj", "{0FA668DC-3293-4EAE-855B-B39903660B77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegisterReadAndWrite", "RegisterReadAndWrite\RegisterReadAndWrite.csproj", "{B65AF300-1F0C-45BD-8A9D-40582DD37061}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "03.RegisterReadAndWrite", "RegisterReadAndWrite\03.RegisterReadAndWrite.csproj", "{B65AF300-1F0C-45BD-8A9D-40582DD37061}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
