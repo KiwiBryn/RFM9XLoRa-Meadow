@@ -1,0 +1,14 @@
+﻿<Project Sdk="Meadow.Sdk/1.1.0">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>App</AssemblyName>
+    <RootNamespace>devMobile.IoT.Rfm9x</RootNamespace>
+    <StartupObject>devMobile.IoT.Rfm9x.Program</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Meadow.Foundation" Version="0.12.0" />
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+</Project>
