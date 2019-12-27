@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "03.RegisterReadAndWrite", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "04.TransmitBasic", "TransmitBasic\04.TransmitBasic.csproj", "{067704D3-A105-4FCD-B102-7842A51F8EBB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReceiveBasic", "ReceiveBasic\ReceiveBasic.csproj", "{986C5549-6EC4-4512-BC03-7AD141243E3A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,12 @@ Global
 		{067704D3-A105-4FCD-B102-7842A51F8EBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{067704D3-A105-4FCD-B102-7842A51F8EBB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{067704D3-A105-4FCD-B102-7842A51F8EBB}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{986C5549-6EC4-4512-BC03-7AD141243E3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{986C5549-6EC4-4512-BC03-7AD141243E3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{986C5549-6EC4-4512-BC03-7AD141243E3A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{986C5549-6EC4-4512-BC03-7AD141243E3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{986C5549-6EC4-4512-BC03-7AD141243E3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{986C5549-6EC4-4512-BC03-7AD141243E3A}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
