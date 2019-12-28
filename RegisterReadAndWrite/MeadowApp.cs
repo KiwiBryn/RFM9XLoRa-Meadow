@@ -108,6 +108,7 @@ namespace devMobile.IoT.Rfm9x.ReadAndWrite
 
 			Rfm9XLoraModem.WriteBytes(writeBuffer);
 		}
+
 		public void RegisterWrite(byte address, [ReadOnlyArray()] byte[] bytes)
 		{
 			byte[] writeBuffer = new byte[1 + bytes.Length];
