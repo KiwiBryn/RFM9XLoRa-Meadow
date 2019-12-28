@@ -3,6 +3,8 @@
     <TargetFramework>net472</TargetFramework>
     <OutputType>Exe</OutputType>
     <AssemblyName>App</AssemblyName>
+    <StartupObject>devMobile.IoT.Rfm9x.ReceiveBasic.Program</StartupObject>
+    <RootNamespace>devMobile.IoT.Rfm9x.ReceiveBasic</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Meadow" Version="0.10.2" />
