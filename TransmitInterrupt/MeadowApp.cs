@@ -69,13 +69,13 @@ namespace devMobile.IoT.Rfm9x.TransmitInterrupt
       {
          byte irqFlags = this.RegisterReadByte(0x12); // RegIrqFlags
 
+         this.RegisterWriteByte(0x12, 0xff);// Clear RegIrqFlags
+
          //Console.WriteLine(string.Format("RegIrqFlags:{0}", Convert.ToString(irqFlags, 2).PadLeft(8, '0')));
          if ((irqFlags & 0b00001000) == 0b00001000)  // TxDone
          {
             Console.WriteLine("Transmit-Done");
          }
-
-         this.RegisterWriteByte(0x12, 0xff);// RegIrqFlags
       }
 
       public Byte RegisterReadByte(byte address)
