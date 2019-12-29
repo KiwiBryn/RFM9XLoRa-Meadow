@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "05.ReceiveBasic", "ReceiveB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "06.ReceiveInterrupt", "ReceiveInterrupt\06.ReceiveInterrupt.csproj", "{9AF7F752-C333-46BF-B2FE-92AA599738C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransmitInterrupt", "TransmitInterrupt\TransmitInterrupt.csproj", "{57C1E87E-7955-45B7-A904-F048B6DA4655}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "07.TransmitInterrupt", "TransmitInterrupt\07.TransmitInterrupt.csproj", "{57C1E87E-7955-45B7-A904-F048B6DA4655}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
