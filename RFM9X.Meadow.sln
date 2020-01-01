@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "06.ReceiveInterrupt", "Rece
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "07.TransmitInterrupt", "TransmitInterrupt\07.TransmitInterrupt.csproj", "{57C1E87E-7955-45B7-A904-F048B6DA4655}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "08.ReceiveTransmitInterrupt", "ReceiveTransmitInterrupt\08.ReceiveTransmitInterrupt.csproj", "{ACA35783-C99E-4779-8905-FCEE233B8106}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,12 @@ Global
 		{57C1E87E-7955-45B7-A904-F048B6DA4655}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57C1E87E-7955-45B7-A904-F048B6DA4655}.Release|Any CPU.Build.0 = Release|Any CPU
 		{57C1E87E-7955-45B7-A904-F048B6DA4655}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{ACA35783-C99E-4779-8905-FCEE233B8106}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACA35783-C99E-4779-8905-FCEE233B8106}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACA35783-C99E-4779-8905-FCEE233B8106}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{ACA35783-C99E-4779-8905-FCEE233B8106}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACA35783-C99E-4779-8905-FCEE233B8106}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACA35783-C99E-4779-8905-FCEE233B8106}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
