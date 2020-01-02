@@ -28,7 +28,8 @@ namespace devMobile.IoT.Rfm9x
       const byte RegVersion = 0x42;
       ISpiBus spiBus;
       SpiPeripheral sx127xDevice;
-      IDigitalOutputPort spiPeriphChipSelect;
+      IDigitalOutputPort spiChipSelectPin;
+      IDigitalOutputPort deviceResetPin;
 
       public MeadowApp()
       {
@@ -46,21 +47,33 @@ namespace devMobile.IoT.Rfm9x
                Console.WriteLine("spiBus == null");
             }
 
-            Console.WriteLine("Creating SPI NSS Port...");
-            spiPeriphChipSelect = Device.CreateDigitalOutputPort(Device.Pins.D09);
-            if (spiPeriphChipSelect == null)
+            Console.WriteLine("Creating SPI ChipSelect...");
+            spiChipSelectPin = Device.CreateDigitalOutputPort(Device.Pins.D09);
+            if (spiChipSelectPin == null)
             {
-               Console.WriteLine("spiPeriphChipSelect == null");
+               Console.WriteLine("spiChipSelectPin == null");
             }
    
             Console.WriteLine("sx127xDevice Device...");
-            sx127xDevice = new SpiPeripheral(spiBus, spiPeriphChipSelect);
+            sx127xDevice = new SpiPeripheral(spiBus, spiChipSelectPin);
             if (sx127xDevice == null)
             {
                Console.WriteLine("sx127xDevice == null");
             }
 
-            Console.WriteLine("ConfigureSpiPort Done...");
+            // Configuring factory reset pin configuration
+            Console.WriteLine("Creating Device Reset...");
+            deviceResetPin = Device.CreateDigitalOutputPort(Device.Pins.D10);
+            if (deviceResetPin == null)
+            {
+               Console.WriteLine("CreateDigitalOutputPort(resetPin) failed");
+            }
+
+            Console.WriteLine("Reseting device...");
+            deviceResetPin.State = false;
+            Task.Delay(10);
+            deviceResetPin.State = true;
+            Task.Delay(10);
          }
          catch (Exception ex)
          {
@@ -76,11 +89,30 @@ namespace devMobile.IoT.Rfm9x
          {
             try
             {
+               // Doesn't work Dec 2019 always returns 0
+               /*
                Console.WriteLine("sx127xDevice.ReadRegister...1");
-
                byte registerValue = sx127xDevice.ReadRegister(RegVersion);
-
                Console.WriteLine("sx127xDevice.ReadRegister...2");
+               */
+
+               // This works, so chip select configuration good
+               var txBuffer = new byte[] { RegVersion, 0x0 };
+               var rxBuffer = new byte[] { 0x0, 0x0 };
+               Console.WriteLine("spiBus.ExchangeData...1");
+               spiBus.ExchangeData(spiChipSelectPin, ChipSelectMode.ActiveLow, txBuffer, rxBuffer);
+               Console.WriteLine("spiBus.ExchangeData...2");
+               byte registerValue = rxBuffer[1];
+               
+
+               /*
+               // This device level approach works, without buffer size issues
+               byte[] txBuffer = new byte[] { RegVersion };
+               Console.WriteLine("spiBus.WriteRead...1");
+               byte[] rxBuffer = sx127xDevice.WriteRead(txBuffer, 2);
+               Console.WriteLine("spiBus.WriteRead...2");
+               byte registerValue = rxBuffer[1];
+               */
 
                Console.WriteLine("Register 0x{0:x2} - Value 0X{1:x2} - Bits {2}", RegVersion, registerValue, Convert.ToString(registerValue, 2).PadLeft(8, '0'));
             }
