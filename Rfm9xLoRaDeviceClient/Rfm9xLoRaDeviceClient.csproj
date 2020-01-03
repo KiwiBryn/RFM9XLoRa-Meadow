@@ -1,0 +1,16 @@
+﻿<Project Sdk="Meadow.Sdk/1.1.0">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>App</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;ADDRESSED_MESSAGES_PAYLOAD</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Meadow" Version="0.10.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Rfm9XLoRaDevice\Rfm9XLoRaDevice.csproj" />
+  </ItemGroup>
+</Project>

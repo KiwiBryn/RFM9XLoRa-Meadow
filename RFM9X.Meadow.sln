@@ -25,6 +25,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "07.TransmitInterrupt", "Tra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "08.ReceiveTransmitInterrupt", "ReceiveTransmitInterrupt\08.ReceiveTransmitInterrupt.csproj", "{ACA35783-C99E-4779-8905-FCEE233B8106}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rfm9xLoRaDeviceClient", "Rfm9xLoRaDeviceClient\Rfm9xLoRaDeviceClient.csproj", "{C0A67B2A-23B6-4447-A757-64F13285B4EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rfm9XLoRaDevice", "Rfm9XLoRaDevice\Rfm9XLoRaDevice.csproj", "{32BD441F-BDD5-410D-9F38-D5EDA816056E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +95,16 @@ Global
 		{ACA35783-C99E-4779-8905-FCEE233B8106}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACA35783-C99E-4779-8905-FCEE233B8106}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ACA35783-C99E-4779-8905-FCEE233B8106}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{C0A67B2A-23B6-4447-A757-64F13285B4EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0A67B2A-23B6-4447-A757-64F13285B4EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0A67B2A-23B6-4447-A757-64F13285B4EF}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{C0A67B2A-23B6-4447-A757-64F13285B4EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0A67B2A-23B6-4447-A757-64F13285B4EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0A67B2A-23B6-4447-A757-64F13285B4EF}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{32BD441F-BDD5-410D-9F38-D5EDA816056E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32BD441F-BDD5-410D-9F38-D5EDA816056E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32BD441F-BDD5-410D-9F38-D5EDA816056E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32BD441F-BDD5-410D-9F38-D5EDA816056E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
