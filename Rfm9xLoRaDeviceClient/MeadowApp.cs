@@ -83,8 +83,9 @@ namespace devMobile.IoT.Rfm9x.LoRaDeviceClient
 
 #if ADDRESSED_MESSAGES_PAYLOAD
             string addressText = UTF8Encoding.UTF8.GetString(e.Address);
+            string addressHex = BitConverter.ToString(e.Address);
 
-            Console.WriteLine(@"{0:HH:mm:ss}-RX From {1} PacketSnr {2:0.0} Packet RSSI {3}dBm RSSI {4}dBm = {5} byte message ""{6}""", DateTime.Now, addressText, e.PacketSnr, e.PacketRssi, e.Rssi, e.Data.Length, messageText);
+            Console.WriteLine(@"{0:HH:mm:ss}-RX From {1} ({2}) PacketSnr {3:0.0} Packet RSSI {4}dBm RSSI {5}dBm = {6} byte message ""{7}""", DateTime.Now, addressText, addressHex, e.PacketSnr, e.PacketRssi, e.Rssi, e.Data.Length, messageText);
 #else
             Console.WriteLine(@"{0:HH:mm:ss}-RX PacketSnr {1:0.0} Packet RSSI {2}dBm RSSI {3}dBm = {4} byte message ""{5}""", DateTime.Now, e.PacketSnr, e.PacketRssi, e.Rssi, e.Data.Length, messageText);
 #endif
