@@ -17,7 +17,7 @@ The repo has the source code for the series of blog posts written as I build thi
 My initial test rig used a Meadow device and a [Dragino Arduino shield](https://www.dragino.com/products/lora/item/102-lora-shield.html). 
 ![Dragino Test rig](MeadowDraginoV2.jpg) this was so I could only connect the pins that I needed.
 
-My second test rig uses a Mead device and an Adafruit [433MHz](https://www.adafruit.com/product/3232) or [868MHz](https://www.adafruit.com/product/3231) feather wing 
+My second test rig uses a Meadow device and an Adafruit [433MHz](https://www.adafruit.com/product/3232) or [868MHz](https://www.adafruit.com/product/3231) feather wing 
 ![Adafruit Test rig](MeadowAdafruitLoRa.jpg)
 
 There are also parallel development projects for [Windows 10 IoT Core](https://github.com/KiwiBryn/RFM9XLoRa-Net) and [.Net Micro Framework](https://github.com/KiwiBryn/RFM9XLoRa-NetMF)
