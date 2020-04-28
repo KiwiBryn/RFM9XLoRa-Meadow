@@ -101,14 +101,14 @@ namespace devMobile.IoT.Rfm9x.TransmitInterrupt
       public byte[] RegisterRead(byte address, int length)
       {
          byte[] writeBuffer = new byte[] { address &= RegisterAddressReadMask };
-         byte[] repyBuffer = new byte[length + 1];
+         byte[] replyBuffer = new byte[length + 1];
          Debug.Assert(Rfm9XLoraModem != null);
 
-         byte[] readBuffer = Rfm9XLoraModem.WriteRead(writeBuffer, (ushort)repyBuffer.Length);
+         byte[] readBuffer = Rfm9XLoraModem.WriteRead(writeBuffer, (ushort)replyBuffer.Length);
 
-         Array.Copy(readBuffer, 1, repyBuffer, 0, length);
+         Array.Copy(readBuffer, 1, replyBuffer, 0, length);
 
-         return repyBuffer;
+         return replyBuffer;
       }
 
       public void RegisterWriteByte(byte address, byte value)
