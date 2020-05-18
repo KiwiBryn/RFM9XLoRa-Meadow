@@ -28,7 +28,8 @@ namespace devMobile.IoT.Rfm9x.ShieldSPI
       const byte RegVersion = 0x42;
       ISpiBus spiBus;
       SpiPeripheral sx127xDevice;
-      IDigitalOutputPort spiPeriphChipSelect;
+      IDigitalOutputPort chipSelectGpioPin;
+      IDigitalOutputPort resetGpioPin;
 
       public MeadowApp()
       {
@@ -52,17 +53,24 @@ namespace devMobile.IoT.Rfm9x.ShieldSPI
             }
 
             Console.WriteLine("Creating SPI NSS Port...");
-            spiPeriphChipSelect = Device.CreateDigitalOutputPort(Device.Pins.D09, initialState:true);
-            if (spiPeriphChipSelect == null)
+            chipSelectGpioPin = Device.CreateDigitalOutputPort(Device.Pins.D09, initialState:true);
+            if (chipSelectGpioPin == null)
             {
-               Console.WriteLine("spiPeriphChipSelect == null");
+               Console.WriteLine("chipSelectGpioPin == null");
             }
 
             Console.WriteLine("sx127xDevice Device...");
-            sx127xDevice = new SpiPeripheral(spiBus, spiPeriphChipSelect);
+            sx127xDevice = new SpiPeripheral(spiBus, chipSelectGpioPin);
             if (sx127xDevice == null)
             {
                Console.WriteLine("sx127xDevice == null");
+            }
+
+            // Factory reset pin configuration
+            resetGpioPin = Device.CreateDigitalOutputPort(Device.Pins.D10, true);
+            if (sx127xDevice == null)
+            {
+               Console.WriteLine("resetPin == null");
             }
 
             Console.WriteLine("ConfigureSpiPort Done...");
@@ -85,31 +93,33 @@ namespace devMobile.IoT.Rfm9x.ShieldSPI
             {
                byte registerValue;
 
-               // Doesn't work Dec 2019 always returns 0
-               //registerValue = sx127xDevice.ReadRegister(RegVersion);
+               // Works May 2020
+               registerValue = sx127xDevice.ReadRegister(RegVersion);
 
-               // Using low level approach works
+               // Works May 2020
                /*
                var txBuffer = new byte[] { RegVersion, 0x0 };
-               var rxBuffer = new byte[] { 0x0, 0x0 };
+               var rxBuffer = new byte[txBuffer.Length];
                Console.WriteLine("spiBus.ExchangeData...1");
-               spiBus.ExchangeData(spiPeriphChipSelect, ChipSelectMode.ActiveLow, txBuffer, rxBuffer);
+               spiBus.ExchangeData(chipSelectGpioPin, ChipSelectMode.ActiveLow, txBuffer, rxBuffer);
                Console.WriteLine("spiBus.ExchangeData...2");
                registerValue = rxBuffer[1];
                */
 
-               // Using this device level approach works, without buffer size issues
-               byte[] txBuffer = new byte[] { RegVersion };
+               // Doesn't work May 2020 returns  Register 0x42 - Value 0X2d - Bits 00101101 
+               /*
+               byte[] txBuffer = new byte[] { RegVersion, 0x0 };
                Console.WriteLine("spiBus.WriteRead...1");
-               byte[] rxBuffer = sx127xDevice.WriteRead(txBuffer, 2);
+               byte[] rxBuffer = sx127xDevice.WriteRead(txBuffer, (ushort)txBuffer.Length);
                Console.WriteLine("spiBus.WriteRead...2");
                registerValue = rxBuffer[1];
+               */
 
                Console.WriteLine("Register 0x{0:x2} - Value 0X{1:x2} - Bits {2}", RegVersion, registerValue, Convert.ToString(registerValue, 2).PadLeft(8, '0'));
             }
             catch (Exception ex)
             {
-               Console.WriteLine("ReadDeviceIDDiy " + ex.Message);
+               Console.WriteLine("ReadDeviceID " + ex.Message);
             }
 
             Task.Delay(10000).Wait();
