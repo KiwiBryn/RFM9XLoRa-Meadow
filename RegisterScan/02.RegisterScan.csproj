@@ -7,6 +7,6 @@
     <StartupObject>devMobile.IoT.Rfm9x.RegisterScan.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Meadow" Version="0.10.2" />
+    <PackageReference Include="Meadow" Version="0.12.1" />
   </ItemGroup>
 </Project>

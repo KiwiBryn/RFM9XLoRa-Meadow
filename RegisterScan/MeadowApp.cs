@@ -26,30 +26,34 @@ namespace devMobile.IoT.Rfm9x.RegisterScan
    public sealed class Rfm9XDevice
    {
       private SpiPeripheral sx127xDevice;
-      private IDigitalOutputPort spiPeriphChipSelect;
+      private IDigitalOutputPort chipSelectGpioPin;
+      private IDigitalOutputPort resetGpioPin;
 
-      public Rfm9XDevice(IIODevice device, ISpiBus spiBus, IPin chipSelectPin)
+      public Rfm9XDevice(IIODevice device, ISpiBus spiBus, IPin chipSelectPin, IPin resetPin)
       {
-         spiPeriphChipSelect = device.CreateDigitalOutputPort(chipSelectPin, initialState: true);
-         if (spiPeriphChipSelect == null)
+         chipSelectGpioPin = device.CreateDigitalOutputPort(chipSelectPin, initialState: true);
+         if (chipSelectGpioPin == null)
          {
-            Console.WriteLine("spiPeriphChipSelect == null");
+            Console.WriteLine("chipSelectGpioPin == null");
          }
 
-         sx127xDevice = new SpiPeripheral(spiBus, spiPeriphChipSelect);
+         sx127xDevice = new SpiPeripheral(spiBus, chipSelectGpioPin);
          if (sx127xDevice == null)
          {
             Console.WriteLine("sx127xDevice == null");
+         }
+
+         // Factory reset pin configuration
+         resetGpioPin = device.CreateDigitalOutputPort(resetPin, true);
+         if (sx127xDevice == null)
+         {
+            Console.WriteLine("resetGpioPin == null");
          }
       }
 
       public Byte RegisterReadByte(byte registerAddress)
       {
-         byte[] txBuffer = new byte[] { registerAddress };
-
-         byte[] rxBuffer = sx127xDevice.WriteRead(txBuffer, 2);
-
-         return rxBuffer[1];
+         return sx127xDevice.ReadRegister(registerAddress);
       }
    }
 
@@ -65,7 +69,7 @@ namespace devMobile.IoT.Rfm9x.RegisterScan
             Console.WriteLine("spiBus == null");
          }
 
-         rfm9XDevice = new Rfm9XDevice(Device, spiBus, Device.Pins.D09);
+         rfm9XDevice = new Rfm9XDevice(Device, spiBus, Device.Pins.D09, Device.Pins.D10);
 
          while (true)
          {
