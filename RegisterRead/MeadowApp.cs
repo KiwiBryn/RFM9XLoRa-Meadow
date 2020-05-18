@@ -26,9 +26,9 @@ namespace devMobile.IoT.Rfm9x.RegisterRead
    public class MeadowApp : App<F7Micro, MeadowApp>
    {
       const byte RegVersion = 0x42;
-      ISpiBus spiBus;
       SpiPeripheral sx127xDevice;
-      IDigitalOutputPort spiPeriphChipSelect;
+      IDigitalOutputPort chipSelectGpioPin;
+      IDigitalOutputPort resetGpioPin;
 
       public MeadowApp()
       {
@@ -40,24 +40,31 @@ namespace devMobile.IoT.Rfm9x.RegisterRead
       {
          try
          {
-            spiBus = Device.CreateSpiBus(500);
+            ISpiBus spiBus = Device.CreateSpiBus(500);
             if (spiBus == null)
             {
                Console.WriteLine("spiBus == null");
             }
 
             Console.WriteLine("Creating SPI NSS Port...");
-            spiPeriphChipSelect = Device.CreateDigitalOutputPort(Device.Pins.D09, initialState: true);
-            if (spiPeriphChipSelect == null)
+            chipSelectGpioPin = Device.CreateDigitalOutputPort(Device.Pins.D09, initialState: true);
+            if (chipSelectGpioPin == null)
             {
-               Console.WriteLine("spiPeriphChipSelect == null");
+               Console.WriteLine("chipSelectPin == null");
             }
 
             Console.WriteLine("sx127xDevice Device...");
-            sx127xDevice = new SpiPeripheral(spiBus, spiPeriphChipSelect);
+            sx127xDevice = new SpiPeripheral(spiBus, chipSelectGpioPin);
             if (sx127xDevice == null)
             {
                Console.WriteLine("sx127xDevice == null");
+            }
+
+            // Factory reset pin configuration
+            resetGpioPin = Device.CreateDigitalOutputPort(Device.Pins.D10, true);
+            if (sx127xDevice == null)
+            {
+               Console.WriteLine("resetPin == null");
             }
 
             Console.WriteLine("ConfigureSpiPort Done...");
@@ -80,11 +87,9 @@ namespace devMobile.IoT.Rfm9x.RegisterRead
                byte registerValue;
 
                // Using this device level approach works, without buffer size issues
-               byte[] txBuffer = new byte[] { RegVersion };
-               Console.WriteLine("spiBus.WriteRead...1");
-               byte[] rxBuffer = sx127xDevice.WriteRead(txBuffer, 2);
-               Console.WriteLine("spiBus.WriteRead...2");
-               registerValue = rxBuffer[1];
+               Console.WriteLine("sx127xDevice.ReadRegister...1");
+               registerValue = sx127xDevice.ReadRegister(RegVersion);
+               Console.WriteLine("sx127xDevice.ReadRegister...2");
 
                Console.WriteLine("Register 0x{0:x2} - Value 0X{1:x2} - Bits {2}", RegVersion, registerValue, Convert.ToString(registerValue, 2).PadLeft(8, '0'));
             }
