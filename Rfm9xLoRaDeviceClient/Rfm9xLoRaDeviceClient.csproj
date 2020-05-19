@@ -8,7 +8,7 @@
     <DefineConstants>TRACE;ADDRESSED_MESSAGES_PAYLOAD</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Meadow" Version="0.10.2" />
+    <PackageReference Include="Meadow" Version="0.12.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Rfm9XLoRaDevice\Rfm9XLoRaDevice.csproj" />
