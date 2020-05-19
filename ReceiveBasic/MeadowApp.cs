@@ -26,126 +26,182 @@ namespace devMobile.IoT.Rfm9x.ReceiveBasic
 	using Meadow.Devices;
 	using Meadow.Hardware;
 
-	public sealed class Rfm9XDevice
-	{
-		private SpiPeripheral Rfm9XLoraModem;
-		private IDigitalOutputPort ChipSelectGpioPin;
-		private const byte RegisterAddressReadMask = 0X7f;
-		private const byte RegisterAddressWriteMask = 0x80;
+   public sealed class Rfm9XDevice
+   {
+      private ISpiBus SpiBus;
+      private SpiPeripheral Rfm9XLoraModem;
+      private IDigitalOutputPort ChipSelectGpioPin;
+      private IDigitalOutputPort ResetGpioPin;
+      private const byte RegisterAddressReadMask = 0X7f;
+      private const byte RegisterAddressWriteMask = 0x80;
 
-		public Rfm9XDevice(IIODevice device, ISpiBus spiBus, IPin chipSelectPin, IPin resetPin)
-		{
-			// Chip select pin configuration
-			ChipSelectGpioPin = device.CreateDigitalOutputPort(chipSelectPin, initialState: true);
-			if (ChipSelectGpioPin == null)
-			{
-				Console.WriteLine("ChipSelectGpioPin == null");
-			}
+      public Rfm9XDevice(IIODevice device, ISpiBus spiBus, IPin chipSelectPin, IPin resetPin)
+      {
+         SpiBus = spiBus;
 
-			// Factory reset pin configuration
-			IDigitalOutputPort resetGpioPin = device.CreateDigitalOutputPort(resetPin);
-			if (resetGpioPin == null)
-			{
-				Console.WriteLine("resetGpioPin == null");
-			}
-			resetGpioPin.State = false;
-			Task.Delay(10);
-			resetGpioPin.State = true;
-			Task.Delay(10);
+         // Chip select pin configuration
+         ChipSelectGpioPin = device.CreateDigitalOutputPort(chipSelectPin, initialState: true);
+         if (ChipSelectGpioPin == null)
+         {
+            Console.WriteLine("ChipSelectGpioPin == null");
+         }
 
-			Rfm9XLoraModem = new SpiPeripheral(spiBus, ChipSelectGpioPin);
-			if (Rfm9XLoraModem == null)
-			{
-				Console.WriteLine("Rfm9XLoraModem == null");
-			}
-		}
+         Rfm9XLoraModem = new SpiPeripheral(spiBus, ChipSelectGpioPin);
+         if (Rfm9XLoraModem == null)
+         {
+            Console.WriteLine("Rfm9XLoraModem == null");
+         }
 
-		public Byte RegisterReadByte(byte address)
-		{
-			byte[] writeBuffer = new byte[] { address &= RegisterAddressReadMask };
-			Debug.Assert(Rfm9XLoraModem != null);
+         // Factory reset pin configuration
+         ResetGpioPin = device.CreateDigitalOutputPort(resetPin);
+         if (ResetGpioPin == null)
+         {
+            Console.WriteLine("ResetGpioPin == null");
+         }
+         ResetGpioPin.State = false;
+         Task.Delay(10);
+         ResetGpioPin.State = true;
+         Task.Delay(10);
+      }
 
-			byte[] readBuffer = Rfm9XLoraModem.WriteRead(writeBuffer, 2);
+      public Byte RegisterReadByteA(byte address)
+      {
+         Debug.Assert(Rfm9XLoraModem != null);
 
-			return readBuffer[1];
-		}
+         return Rfm9XLoraModem.ReadRegister(address);
+      }
 
-		public ushort RegisterReadWord(byte address)
-		{
-			byte[] writeBuffer = new byte[] { address &= RegisterAddressReadMask };
-			Debug.Assert(Rfm9XLoraModem != null);
+      public Byte RegisterReadByte(byte address)
+      {
+         byte[] writeBuffer = new byte[] { address &= RegisterAddressReadMask, 0x0 };
+         byte[] readBuffer = new byte[writeBuffer.Length];
+         Debug.Assert(Rfm9XLoraModem != null);
 
-			byte[] readBuffer = Rfm9XLoraModem.WriteRead(writeBuffer, 3);
+         SpiBus.ExchangeData(this.ChipSelectGpioPin, ChipSelectMode.ActiveLow, writeBuffer, readBuffer);
 
-			return (ushort)(readBuffer[2] + (readBuffer[1] << 8));
-		}
+         return readBuffer[1];
+      }
 
-		public byte[] RegisterRead(byte address, int length)
-		{
-			byte[] writeBuffer = new byte[] { address &= RegisterAddressReadMask };
-			byte[] replyBuffer = new byte[length + 1];
-			Debug.Assert(Rfm9XLoraModem != null);
+      public ushort RegisterReadWordA(byte address)
+      {
+         Debug.Assert(Rfm9XLoraModem != null);
 
-			byte[] readBuffer = Rfm9XLoraModem.WriteRead(writeBuffer, (ushort)replyBuffer.Length);
+         return Rfm9XLoraModem.ReadUShort(address);
+      }
 
-			Array.Copy(readBuffer, 1, replyBuffer, 0, length);
+      public ushort RegisterReadWordB(byte address)
+      {
+         byte[] writeBuffer = new byte[] { address &= RegisterAddressReadMask, 0x0, 0x0 };
+         byte[] readBuffer = new byte[writeBuffer.Length];
+         Debug.Assert(Rfm9XLoraModem != null);
 
-			return replyBuffer;
-		}
+         SpiBus.ExchangeData(this.ChipSelectGpioPin, ChipSelectMode.ActiveLow, writeBuffer, readBuffer);
 
-		public void RegisterWriteByte(byte address, byte value)
-		{
-			byte[] writeBuffer = new byte[] { address |= RegisterAddressWriteMask, value };
-			Debug.Assert(Rfm9XLoraModem != null);
+         return (ushort)(readBuffer[2] + (readBuffer[1] << 8));
+      }
 
-			Rfm9XLoraModem.WriteBytes(writeBuffer);
-		}
+      public byte[] RegisterReadA(byte address, int length)
+      {
+         Debug.Assert(Rfm9XLoraModem != null);
 
-		public void RegisterWriteWord(byte address, ushort value)
-		{
-			byte[] valueBytes = BitConverter.GetBytes(value);
-			byte[] writeBuffer = new byte[] { address |= RegisterAddressWriteMask, valueBytes[0], valueBytes[1] };
-			Debug.Assert(Rfm9XLoraModem != null);
+         return Rfm9XLoraModem.ReadRegisters(address, (ushort)length);
+      }
 
-			Rfm9XLoraModem.WriteBytes(writeBuffer);
-		}
+      public byte[] RegisterRead(byte address, int length)
+      {
+         byte[] writeBuffer = new byte[length + 1];
+         byte[] readBuffer = new byte[writeBuffer.Length];
+         byte[] replyBuffer = new byte[length];
+         Debug.Assert(Rfm9XLoraModem != null);
 
-		public void RegisterWrite(byte address, [ReadOnlyArray()] byte[] bytes)
-		{
-			byte[] writeBuffer = new byte[1 + bytes.Length];
-			Debug.Assert(Rfm9XLoraModem != null);
+         writeBuffer[0] = address &= RegisterAddressReadMask;
 
-			Array.Copy(bytes, 0, writeBuffer, 1, bytes.Length);
-			writeBuffer[0] = address |= RegisterAddressWriteMask;
+         SpiBus.ExchangeData(this.ChipSelectGpioPin, ChipSelectMode.ActiveLow, writeBuffer, readBuffer);
 
-			Rfm9XLoraModem.WriteBytes(writeBuffer);
-		}
+         Array.Copy(readBuffer, 1, replyBuffer, 0, length);
 
-		public void RegisterDump()
-		{
-			Console.WriteLine("Register dump");
-			for (byte registerIndex = 0; registerIndex <= 0x42; registerIndex++)
-			{
-				byte registerValue = this.RegisterReadByte(registerIndex);
+         return replyBuffer;
+      }
 
-				Console.WriteLine("Register 0x{0:x2} - Value 0X{1:x2} - Bits {2}", registerIndex, registerValue, Convert.ToString(registerValue, 2).PadLeft(8, '0'));
-			}
-		}
-	}
+      public void RegisterWriteByteA(byte address, byte value)
+      {
+         Debug.Assert(Rfm9XLoraModem != null);
 
-	public class MeadowApp : App<F7Micro, MeadowApp>
+         Rfm9XLoraModem.WriteRegister(address |= RegisterAddressWriteMask, value);
+      }
+
+      public void RegisterWriteByte(byte address, byte value)
+      {
+         byte[] writeBuffer = new byte[] { address |= RegisterAddressWriteMask, value };
+         byte[] readBuffer = new byte[writeBuffer.Length];
+         Debug.Assert(Rfm9XLoraModem != null);
+
+         SpiBus.ExchangeData(this.ChipSelectGpioPin, ChipSelectMode.ActiveLow, writeBuffer, readBuffer);
+      }
+
+      public void RegisterWriteWordA(byte address, ushort value)
+      {
+         Debug.Assert(Rfm9XLoraModem != null);
+
+         Rfm9XLoraModem.WriteUShort(address |= RegisterAddressWriteMask, value);
+      }
+
+      public void RegisterWriteWordB(byte address, ushort value)
+      {
+         byte[] valueBytes = BitConverter.GetBytes(value);
+         byte[] writeBuffer = new byte[] { address |= RegisterAddressWriteMask, valueBytes[0], valueBytes[1] };
+         byte[] readBuffer = new byte[writeBuffer.Length];
+         Debug.Assert(Rfm9XLoraModem != null);
+
+         SpiBus.ExchangeData(this.ChipSelectGpioPin, ChipSelectMode.ActiveLow, writeBuffer, readBuffer);
+      }
+
+      public void RegisterWriteA(byte address, [ReadOnlyArray()] byte[] bytes)
+      {
+         Debug.Assert(Rfm9XLoraModem != null);
+
+         Rfm9XLoraModem.WriteRegisters(address |= RegisterAddressWriteMask, bytes);
+      }
+
+      public void RegisterWrite(byte address, [ReadOnlyArray()] byte[] bytes)
+      {
+         byte[] writeBuffer = new byte[1 + bytes.Length];
+         byte[] readBuffer = new byte[writeBuffer.Length];
+         Debug.Assert(Rfm9XLoraModem != null);
+
+         Array.Copy(bytes, 0, writeBuffer, 1, bytes.Length);
+         writeBuffer[0] = address |= RegisterAddressWriteMask;
+
+         SpiBus.ExchangeData(this.ChipSelectGpioPin, ChipSelectMode.ActiveLow, writeBuffer, readBuffer);
+      }
+
+      public void RegisterDump()
+      {
+         Console.WriteLine("Register dump");
+         for (byte registerIndex = 0; registerIndex <= 0x42; registerIndex++)
+         {
+            byte registerValue = this.RegisterReadByte(registerIndex);
+
+            Console.WriteLine("Register 0x{0:x2} - Value 0X{1:x2} - Bits {2}", registerIndex, registerValue, Convert.ToString(registerValue, 2).PadLeft(8, '0'));
+         }
+      }
+   }
+
+   public class MeadowApp : App<F7Micro, MeadowApp>
 	{
 		private Rfm9XDevice rfm9XDevice;
 
 		public MeadowApp()
 		{
-			ISpiBus spiBus = Device.CreateSpiBus(500);
+         Console.WriteLine("Starting devMobile.IoT.Rfm9x.ReceiveBasic");
+
+         ISpiBus spiBus = Device.CreateSpiBus(500);
 			if (spiBus == null)
 			{
 				Console.WriteLine("spiBus == null");
 			}
 
-			rfm9XDevice = new Rfm9XDevice(Device, spiBus, Device.Pins.D09, Device.Pins.D11);
+			rfm9XDevice = new Rfm9XDevice(Device, spiBus, Device.Pins.D09, Device.Pins.D10);
 
 			// Put device into LoRa + Sleep mode
 			rfm9XDevice.RegisterWriteByte(0x01, 0b10000000); // RegOpMode 
