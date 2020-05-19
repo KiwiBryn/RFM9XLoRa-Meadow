@@ -24,6 +24,7 @@ namespace devMobile.IoT.Rfm9x
 
 	public sealed class RegisterManager
 	{
+		ISpiBus SpiBus = null;
 		private IDigitalOutputPort ChipSelectGpioPin = null;
 		private SpiPeripheral Rfm9XLoraModem = null;
 		private const byte RegisterAddressReadMask = 0X7f;
@@ -31,6 +32,8 @@ namespace devMobile.IoT.Rfm9x
 
 		public RegisterManager(IIODevice device, ISpiBus spiBus, IPin chipSelectPin)
 		{
+			this.SpiBus = spiBus;
+
 			// Chip select pin configuration
 			ChipSelectGpioPin = device.CreateDigitalOutputPort(chipSelectPin, initialState: true);
 
@@ -39,31 +42,25 @@ namespace devMobile.IoT.Rfm9x
 
 		public Byte ReadByte(byte address)
 		{
-			byte[] writeBuffer = new byte[] { address &= RegisterAddressReadMask };
+			byte[] writeBuffer = new byte[] { address &= RegisterAddressReadMask, 0x0 };
+			byte[] readBuffer = new byte[writeBuffer.Length];
 			Debug.Assert(Rfm9XLoraModem != null);
 
-			byte[] readBuffer = Rfm9XLoraModem.WriteRead(writeBuffer, 2);
+			SpiBus.ExchangeData(this.ChipSelectGpioPin, ChipSelectMode.ActiveLow, writeBuffer, readBuffer);
 
 			return readBuffer[1];
 		}
 
-		public ushort ReadWord(byte address)
-		{
-			byte[] writeBuffer = new byte[] { address &= RegisterAddressReadMask };
-			Debug.Assert(Rfm9XLoraModem != null);
-
-			byte[] readBuffer = Rfm9XLoraModem.WriteRead(writeBuffer, 3);
-
-			return (ushort)(readBuffer[2] + (readBuffer[1] << 8));
-		}
-
 		public byte[] Read(byte address, int length)
 		{
-			byte[] writeBuffer = new byte[] { address &= RegisterAddressReadMask };
+			byte[] writeBuffer = new byte[length + 1];
+			byte[] readBuffer = new byte[writeBuffer.Length];
 			byte[] replyBuffer = new byte[length];
 			Debug.Assert(Rfm9XLoraModem != null);
 
-			byte[] readBuffer = Rfm9XLoraModem.WriteRead(writeBuffer, (ushort)replyBuffer.Length);
+			writeBuffer[0] = address &= RegisterAddressReadMask;
+
+			SpiBus.ExchangeData(this.ChipSelectGpioPin, ChipSelectMode.ActiveLow, writeBuffer, readBuffer);
 
 			Array.Copy(readBuffer, 1, replyBuffer, 0, length);
 
@@ -73,29 +70,22 @@ namespace devMobile.IoT.Rfm9x
 		public void WriteByte(byte address, byte value)
 		{
 			byte[] writeBuffer = new byte[] { address |= RegisterAddressWriteMask, value };
+			byte[] readBuffer = new byte[writeBuffer.Length];
 			Debug.Assert(Rfm9XLoraModem != null);
 
-			Rfm9XLoraModem.WriteBytes(writeBuffer);
-		}
-
-		public void WriteWord(byte address, ushort value)
-		{
-			byte[] valueBytes = BitConverter.GetBytes(value);
-			byte[] writeBuffer = new byte[] { address |= RegisterAddressWriteMask, valueBytes[0], valueBytes[1] };
-			Debug.Assert(Rfm9XLoraModem != null);
-
-			Rfm9XLoraModem.WriteBytes(writeBuffer);
+			SpiBus.ExchangeData(this.ChipSelectGpioPin, ChipSelectMode.ActiveLow, writeBuffer, readBuffer);
 		}
 
 		public void Write(byte address, [ReadOnlyArray()] byte[] bytes)
 		{
 			byte[] writeBuffer = new byte[1 + bytes.Length];
+			byte[] readBuffer = new byte[writeBuffer.Length];
 			Debug.Assert(Rfm9XLoraModem != null);
 
 			Array.Copy(bytes, 0, writeBuffer, 1, bytes.Length);
 			writeBuffer[0] = address |= RegisterAddressWriteMask;
 
-			Rfm9XLoraModem.WriteBytes(writeBuffer);
+			SpiBus.ExchangeData(this.ChipSelectGpioPin, ChipSelectMode.ActiveLow, writeBuffer, readBuffer);
 		}
 
 		public void Dump(byte start, byte finish)
