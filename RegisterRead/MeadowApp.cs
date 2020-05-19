@@ -32,6 +32,8 @@ namespace devMobile.IoT.Rfm9x.RegisterRead
 
       public MeadowApp()
       {
+         Console.WriteLine("Starting devMobile.IoT.Rfm9x.RegisterRead");
+
          ConfigureSpiPort();
          ReadDeviceID();
       }
