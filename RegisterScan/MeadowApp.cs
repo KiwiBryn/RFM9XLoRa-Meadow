@@ -63,6 +63,8 @@ namespace devMobile.IoT.Rfm9x.RegisterScan
 
       public MeadowApp()
       {
+         Console.WriteLine("Starting devMobile.IoT.Rfm9x.RegisterScan");
+
          ISpiBus spiBus = Device.CreateSpiBus(500);
          if (spiBus == null)
          {
