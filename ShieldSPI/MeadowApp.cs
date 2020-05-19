@@ -33,6 +33,8 @@ namespace devMobile.IoT.Rfm9x.ShieldSPI
 
       public MeadowApp()
       {
+         Console.WriteLine("Starting devMobile.IoT.Rfm9x.ShieldSPI");
+
          ConfigureSpiPort();
          ReadDeviceID();
       }
