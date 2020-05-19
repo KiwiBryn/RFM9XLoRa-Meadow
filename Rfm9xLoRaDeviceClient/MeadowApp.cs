@@ -33,6 +33,8 @@ namespace devMobile.IoT.Rfm9x.LoRaDeviceClient
 
       public MeadowApp()
       {
+         Console.WriteLine("Starting devMobile.IoT.Rfm9x.LoRaDeviceClient");
+
          try
          {
             ISpiBus spiBus = Device.CreateSpiBus(500);
