@@ -31,8 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Meadow, Version=0.12.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Meadow.0.12.1\lib\net472\Meadow.dll</HintPath>
+    <Reference Include="Meadow, Version=0.13.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Meadow.0.13.0\lib\net472\Meadow.dll</HintPath>
     </Reference>
     <Reference Include="System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\WildernessLabs.Meadow.Assemblies.0.2.0\lib\net45\System.dll</HintPath>
