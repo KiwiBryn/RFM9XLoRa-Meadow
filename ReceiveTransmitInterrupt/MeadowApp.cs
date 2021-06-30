@@ -36,7 +36,7 @@ namespace devMobile.IoT.Rfm9x.ReceiveTransmitInterrupt
 		private const byte RegisterAddressReadMask = 0X7f;
 		private const byte RegisterAddressWriteMask = 0x80;
 
-		public Rfm9XDevice(IIODevice device, ISpiBus spiBus, IPin chipSelectPin, IPin resetPin, IPin interruptPin)
+		public Rfm9XDevice(IMeadowDevice device, ISpiBus spiBus, IPin chipSelectPin, IPin resetPin, IPin interruptPin)
 		{
 			SpiBus = spiBus;
 
@@ -69,7 +69,7 @@ namespace devMobile.IoT.Rfm9x.ReceiveTransmitInterrupt
 			Task.Delay(10);
 		}
 
-		private void InterruptGpioPin_ValueChanged(object sender, DigitalInputPortEventArgs args)
+		private void InterruptGpioPin_ValueChanged(object sender, DigitalPortResult result)
 		{
 			byte irqFlags = this.RegisterReadByte(0x12); // RegIrqFlags
 			byte numberOfBytes = 0;

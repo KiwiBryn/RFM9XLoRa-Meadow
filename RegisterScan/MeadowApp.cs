@@ -29,7 +29,7 @@ namespace devMobile.IoT.Rfm9x.RegisterScan
       private IDigitalOutputPort chipSelectGpioPin;
       private IDigitalOutputPort resetGpioPin;
 
-      public Rfm9XDevice(IIODevice device, ISpiBus spiBus, IPin chipSelectPin, IPin resetPin)
+      public Rfm9XDevice(IMeadowDevice device, ISpiBus spiBus, IPin chipSelectPin, IPin resetPin)
       {
          chipSelectGpioPin = device.CreateDigitalOutputPort(chipSelectPin, initialState: true);
          if (chipSelectGpioPin == null)

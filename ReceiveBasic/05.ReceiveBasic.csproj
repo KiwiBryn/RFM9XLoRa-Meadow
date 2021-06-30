@@ -7,7 +7,7 @@
     <RootNamespace>devMobile.IoT.Rfm9x.ReceiveBasic</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Meadow" Version="0.13.0" />
+    <PackageReference Include="Meadow" Version="0.23.0" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

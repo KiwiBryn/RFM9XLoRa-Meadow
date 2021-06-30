@@ -20,6 +20,7 @@ namespace devMobile.IoT.Rfm9x
 	using System.Diagnostics;
 	using System.Runtime.InteropServices.WindowsRuntime;
 
+	using Meadow.Devices;
 	using Meadow.Hardware;
 
 	public sealed class RegisterManager
@@ -30,7 +31,7 @@ namespace devMobile.IoT.Rfm9x
 		private const byte RegisterAddressReadMask = 0X7f;
 		private const byte RegisterAddressWriteMask = 0x80;
 
-		public RegisterManager(IIODevice device, ISpiBus spiBus, IPin chipSelectPin)
+		public RegisterManager(IMeadowDevice device, ISpiBus spiBus, IPin chipSelectPin)
 		{
 			this.SpiBus = spiBus;
 

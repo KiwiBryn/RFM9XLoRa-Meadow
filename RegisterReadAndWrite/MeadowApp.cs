@@ -34,7 +34,7 @@ namespace devMobile.IoT.Rfm9x.ReadAndWrite
 		private const byte RegisterAddressReadMask = 0X7f;
 		private const byte RegisterAddressWriteMask = 0x80;
 
-		public Rfm9XDevice(IIODevice device, ISpiBus spiBus, IPin chipSelectPin, IPin resetPin)
+		public Rfm9XDevice(IMeadowDevice device, ISpiBus spiBus, IPin chipSelectPin, IPin resetPin)
       {
 			SpiBus = spiBus;
 

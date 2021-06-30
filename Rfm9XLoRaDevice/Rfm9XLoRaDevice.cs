@@ -375,7 +375,7 @@ namespace devMobile.IoT.Rfm9x
 		private byte[] DeviceAddress = null;
 #endif
 
-		public Rfm9XDevice(IIODevice device, ISpiBus spiBus, IPin chipSelectPin, IPin resetPin, IPin interruptPin)
+		public Rfm9XDevice(IMeadowDevice device, ISpiBus spiBus, IPin chipSelectPin, IPin resetPin, IPin interruptPin)
 		{
 			RegisterManager = new RegisterManager(device, spiBus, chipSelectPin);
 
@@ -737,7 +737,7 @@ namespace devMobile.IoT.Rfm9x
 			OnReceive?.Invoke(this, receiveArgs);
 		}
 
-		private void InterruptGpioPin_ValueChanged(object sender, DigitalInputPortEventArgs args)
+		private void InterruptGpioPin_ValueChanged(object sender, DigitalPortResult e)
 		{
 			// Read RegIrqFlags to see what caused the interrupt
 			Byte IrqFlags = this.RegisterManager.ReadByte((byte)Registers.RegIrqFlags);
