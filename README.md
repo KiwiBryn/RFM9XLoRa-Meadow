@@ -20,4 +20,4 @@ My initial test rig used a Meadow device and a [Dragino Arduino shield](https://
 My second test rig uses a Meadow device and an Adafruit [433MHz](https://www.adafruit.com/product/3232) or [868MHz](https://www.adafruit.com/product/3231) feather wing 
 ![Adafruit Test rig](MeadowAdafruitLoRa.jpg)
 
-There are also parallel development projects for [Windows 10 IoT Core](https://github.com/KiwiBryn/RFM9XLoRa-Net) and [.Net Micro Framework](https://github.com/KiwiBryn/RFM9XLoRa-NetMF)
+There are also parallel development projects for [Windows 10 IoT Core](https://github.com/KiwiBryn/RFM9XLoRa-Net), [TinyCLR](https://github.com/KiwiBryn/RFM9XLoRa-TinyCLR) and [.Net Micro Framework](https://github.com/KiwiBryn/RFM9XLoRa-NetMF)
