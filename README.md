@@ -1,6 +1,8 @@
 # RFM9XLoRa-Meadow
 A C# library for LoRa[@LoRaAlliance](https://lora-alliance.org/) connectivity for Semtech [@SX127X](https://www.semtech.com/products/wireless-rf/lora-transceivers/SX1276)/HopeRF [@RFMRFM9X](http://www.hoperf.com/rf_transceiver/lora/RFM95W.html) equipped shields on  Wilderness labs Meadow devices
 
+WARNING - This library will be replaced with an SX127X version shortly
+
 The repo has the source code for the series of blog posts written as I build this library (based on my Windows 10 IoT Core library)
 
 00. ShieldSPI
@@ -21,3 +23,5 @@ My second test rig uses a Meadow device and an Adafruit [433MHz](https://www.ada
 ![Adafruit Test rig](MeadowAdafruitLoRa.jpg)
 
 There are also parallel development projects for [Windows 10 IoT Core](https://github.com/KiwiBryn/RFM9XLoRa-Net), [TinyCLR](https://github.com/KiwiBryn/RFM9XLoRa-TinyCLR) and [.Net Micro Framework](https://github.com/KiwiBryn/RFM9XLoRa-NetMF)
+
+
